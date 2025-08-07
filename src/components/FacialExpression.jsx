@@ -8,7 +8,7 @@ export default function FacialExpression({ setSongs }) {
 
   useEffect(() => {
     const loadModels = async () => {
-      const MODEL_URL = "/models"; // From public/models/
+      const MODEL_URL = "/models"; 
       try {
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
         await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
@@ -51,7 +51,7 @@ export default function FacialExpression({ setSongs }) {
             }
           }
 
-          detectedMood = detectedMood || "neutral"; // fallback if undefined
+          detectedMood = detectedMood || "neutral"; 
           console.log("Detected mood:", detectedMood);
 
           const response = await axios.get(
@@ -72,15 +72,13 @@ export default function FacialExpression({ setSongs }) {
       }
     };
 
-    // Load models and start video
     loadModels().then(startVideo);
 
-    // Add button click event for detecting mood
     if (videoRef.current && detectMood.current) {
       detectMood.current.addEventListener("click", handleVideoPlay);
     }
 
-    // Cleanup on unmount
+
     return () => {
       if (detectMood.current) {
         detectMood.current.removeEventListener("click", handleVideoPlay);
