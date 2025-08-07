@@ -9,8 +9,10 @@ const MoodSongs = ({ songs }) => {
     const interval = setInterval(() => {
       if (currentIndex !== null && audioRefs.current[currentIndex]) {
         const audio = audioRefs.current[currentIndex];
-        const percent = (audio.currentTime / audio.duration) * 100;
-        setProgress(percent || 0);
+        if (audio?.duration > 0) {
+          const percent = (audio.currentTime / audio.duration) * 100;
+          setProgress(percent || 0);
+        }
       }
     }, 500);
 
@@ -41,18 +43,21 @@ const MoodSongs = ({ songs }) => {
       <div className="w-full p-4 relative">
         <div>
           <h1 className="text-4xl py-3 font-semibold">
-            <span className="uppercase text-[#facc15]">{songs[0].mood}</span> - Mood Recommended Songs
+            <span className="uppercase text-[#facc15]">
+              {songs?.[0]?.mood ?? "Unknown"}
+            </span>{" "}
+            - Mood Recommended Songs
           </h1>
         </div>
         <div className="w-full h-[400px] overflow-y-auto pr-2 mt-4 custom-scroll">
-          {songs.map((item, index) => (
+          {songs?.map((item, index) => (
             <div
               key={index}
               className="flex items-center justify-between gap-4 bg-[#333] hover:bg-[#3a3a3a] rounded-xl px-6 py-4 mb-3 transition duration-300"
             >
               <div className="flex flex-col flex-grow">
-                <h3 className="text-xl font-bold">{item.title}</h3>
-                <p className="text-sm text-gray-400 mt-1">{item.artist}</p>
+                <h3 className="text-xl font-bold">{item?.title ?? "Untitled"}</h3>
+                <p className="text-sm text-gray-400 mt-1">{item?.artist ?? "Unknown Artist"}</p>
 
                 {/* Progress Bar */}
                 {currentIndex === index && (
@@ -80,7 +85,7 @@ const MoodSongs = ({ songs }) => {
                 )}
                 <audio
                   ref={(el) => (audioRefs.current[index] = el)}
-                  src={item.audio}
+                  src={item?.audio}
                   onEnded={handleEnded}
                 />
               </div>
